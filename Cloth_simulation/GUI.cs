@@ -15,6 +15,13 @@ namespace Cloth_simulation
         public GUI()
         {
             InitializeComponent();
+
+            /*Cloth.InputPoints();
+            Cloth.InputSticks();
+            for (int i = 0; i < 2; i++)
+            {
+                Point point = Cloth.PointsArray[i];
+            }*/
         }
     }
 }

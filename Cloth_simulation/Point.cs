@@ -38,6 +38,9 @@ namespace Cloth_simulation
             get => _pinned;
             set => _pinned = value;
         }
+
+        public Spring[] springsArray = new Spring[3];
+
         public Point(double x, double y, double z, double mass)
         {
             this.pos.x = x;
@@ -91,107 +94,36 @@ namespace Cloth_simulation
             return result;
         }
 
-        public void updatePoint(Point point, double dt)
+        public void updatePoint(double dt)
         {
-            if (!point.pinned)
+            if (!pinned)
             {
-                applyFriction(point);
-                Vector newPos = point.pos + point.vel * dt + point.acc * (dt * dt * 0.5);
-                applyTension(point);
-                Vector newAcc = applyGravity(point);
-                Vector newVel = point.vel + (point.acc + newAcc) * (dt * 0.5);
-                if (point.pos != newPos)
-                {
-                    for (int i = 0; i < Environment.spring_size; i++)
-                    {
-                        if (Environment.SpringsArray[i].point0 == point || Environment.SpringsArray[i].point1 == point)
-                        {
-                            Environment.SpringsArray[i].length = -1;
-                        }
-                    }
-                }
-                point.pos = newPos;
-                point.vel = newVel;
-                point.acc = newAcc;
-            }
-        }
-        public void applyFriction(Point point)
-        {
-            ForceOfFriction friction = new ForceOfFriction();
-            point.vel = friction.Apply(point);
-        }
+                ForceOfFriction friction = new ForceOfFriction();
+                vel = friction.Apply(this);
 
-        public void applyTension(Point point)
-        {
-            ForceOfTension tension = new ForceOfTension();
-            point.pos += tension.Apply(point);
-        }
-        public Vector applyGravity(Point point)
-        {
-            ForceOfGravity gravity = new ForceOfGravity();
-            Vector grav_acc = gravity.Apply(point);
-            DragForce drag = new DragForce();
-            Vector drag_force = drag.Apply(point);
-            Vector drag_acc = drag_force / mass;
-            return grav_acc - drag_acc;
-        }
+                Vector newPos = pos + vel * dt + acc * (dt * dt * 0.5);
 
-        public void constrainPoint(Point point)
-        {
-            if (!point.pinned)
-            {
-                applyFriction(point);
+                ForceOfTension tension = new ForceOfTension();
+                pos += tension.Apply(this);
 
-                if (point.pos.x > GUI.width)
-                {
-                    point.pos.x = GUI.width;
-                    if (point.vel.x > 0)
-                    {
-                        point.vel.x *= -1;
-                    }
-                }
-                else if (point.pos.x < 0)
-                {
-                    point.pos.x = 0;
-                    if (point.vel.x < 0)
-                    {
-                        point.vel.x *= -1;
-                    }
-                }
+                ForceOfGravity gravity = new ForceOfGravity();
+                Vector grav_acc = gravity.Apply(this);
+                DragForce drag = new DragForce();
+                Vector drag_force = drag.Apply(this);
+                Vector drag_acc = drag_force / mass;
+                Vector newAcc = grav_acc - drag_acc;
 
-                if (point.pos.y > GUI.width)
+                Vector newVel = vel + (acc + newAcc) * (dt * 0.5);
+                if (this.pos != newPos)
                 {
-                    point.pos.y = GUI.width;
-                    if (point.vel.y > 0)
+                    for (int i = 0; i < 4; i++)
                     {
-                        point.vel.y *= -1;
+                        springsArray[i].length = -1;
                     }
                 }
-                else if (point.pos.y < 0)
-                {
-                    point.pos.y = 0;
-                    if (point.vel.y < 0)
-                    {
-                        point.vel.y *= -1;
-                    }
-                }
-
-                if (point.pos.z > GUI.height)
-                {
-                    point.pos.z = GUI.height;
-                    if (point.vel.z > 0)
-                    {
-                        point.vel.z *= -1;
-                    }
-                }
-                else if (point.pos.z < 0)
-                {
-                    point.pos.z = 0;
-                    if (point.vel.z < 0)
-                    {
-                        point.vel.z *= -1;
-                    }
-                }
+                pos = newPos;
+                vel = newVel;
+                acc = newAcc;
             }
         }
     }

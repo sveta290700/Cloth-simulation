@@ -9,18 +9,14 @@ namespace Cloth_simulation
     {
         public Vector Apply(Point point)
         {
-            for (int i = 0; i < Environment.spring_size; i++)
+            Vector result = new Vector();
+            for (int i = 0; i < 4; i++)
             {
-                if (Environment.SpringsArray[i].point0 == point || Environment.SpringsArray[i].point1 == point)
-                {
-                    double distance = Environment.SpringsArray[i].point0.distanceTo(Environment.SpringsArray[i].point1);
-                    distance -= Environment.SpringsArray[i].getLength();
-                    Vector result = new Vector(distance, distance, distance) * Environment.SpringsArray[i].tension_koeff;
-                    return result;
-                }
+                double distance = point.springsArray[i].point0.distanceTo(point.springsArray[i].point1);
+                distance -= point.springsArray[i].getLength();
+                result += new Vector(distance, distance, distance) * point.springsArray[i].tension_сoeff;
             }
-            Vector emptyResult = new Vector();
-            return emptyResult;
+            return result;
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Cloth_simulation
 {
@@ -21,10 +18,10 @@ namespace Cloth_simulation
             get => _point1;
         }
 
-        private const double _tension_koeff = 0.2;
-        public double tension_koeff
+        private const double _tension_сoeff = 0.2;
+        public double tension_сoeff
         {
-            get => _tension_koeff;
+            get => _tension_сoeff;
         }
 
         private double _length;
@@ -41,36 +38,36 @@ namespace Cloth_simulation
         }
         public double getLength()
         {
-            if (this.length == -1)
+            if (length == -1)
             {
-                this.length = point0.distanceTo(point1);
+                length = point0.distanceTo(point1);
             }
-            return this.length;
+            return length;
         }
 
-        public void updateSpring(Spring spring)
+        public void updateSpring()
         {
-            double dx = spring.point1.pos.x - spring.point0.pos.x;
-            double dy = spring.point1.pos.y - spring.point0.pos.y;
-            double dz = spring.point1.pos.z - spring.point0.pos.z;
-            double distance = spring.point0.distanceTo(spring.point1);
-            double difference = spring.getLength() - distance;
+            double dx = point1.pos.x - point0.pos.x;
+            double dy = point1.pos.y - point0.pos.y;
+            double dz = point1.pos.z - point0.pos.z;
+            double distance = point0.distanceTo(point1);
+            double difference = getLength() - distance;
             double percent = difference / distance / 2;
             double offsetX = dx * percent;
             double offsetY = dy * percent;
             double offsetZ = dz * percent;
 
-            if (!spring.point0.pinned)
+            if (!point0.pinned)
             {
-                spring.point0.pos.x -= offsetX;
-                spring.point0.pos.y -= offsetY;
-                spring.point0.pos.z -= offsetZ;
+                point0.pos.x -= offsetX;
+                point0.pos.y -= offsetY;
+                point0.pos.z -= offsetZ;
             }
-            if (!spring.point1.pinned)
+            if (!point1.pinned)
             {
-                spring.point1.pos.x += offsetX;
-                spring.point1.pos.y += offsetY;
-                spring.point0.pos.z += offsetZ;
+                point1.pos.x += offsetX;
+                point1.pos.y += offsetY;
+                point0.pos.z += offsetZ;
             }
         }
     }

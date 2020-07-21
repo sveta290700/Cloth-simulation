@@ -12,16 +12,11 @@ namespace Cloth_simulation
 {
     public partial class GUI : Form
     {
+        public static int width = 684;
+        public static int height = 661;
         public GUI()
         {
             InitializeComponent();
-
-            /*Cloth.InputPoints();
-            Cloth.InputSticks();
-            for (int i = 0; i < 2; i++)
-            {
-                Point point = Cloth.PointsArray[i];
-            }*/
         }
     }
 }

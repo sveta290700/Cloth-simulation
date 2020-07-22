@@ -46,11 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DragForce.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="ForceOfFriction.cs" />
-    <Compile Include="ForceOfGravity.cs" />
-    <Compile Include="ForceOfTension.cs" />
+    <Compile Include="FrictionForce.cs" />
+    <Compile Include="GravityForce.cs" />
+    <Compile Include="TensionForce.cs" />
     <Compile Include="GUI.cs">
       <SubType>Form</SubType>
     </Compile>

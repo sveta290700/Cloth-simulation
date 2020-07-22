@@ -17,19 +17,18 @@ namespace Cloth_simulation
         {
             get => _point1;
         }
-
-        private const double _tension_сoeff = 0.2;
-        public double tension_сoeff
+        private const double _tension_сoefficient = 0.2;
+        public double tension_сoefficient
         {
-            get => _tension_сoeff;
+            get => _tension_сoefficient;
         }
-
         private double _length;
         public double length
         {
             get => _length;
             set => _length = value;
         }
+
         public Spring(Point point0, Point point1) 
         {
             this._point0 = point0;
@@ -44,30 +43,23 @@ namespace Cloth_simulation
             }
             return length;
         }
-
-        public void updateSpring()
+        private Vector getOffset(double percent)
         {
-            double dx = point1.pos.x - point0.pos.x;
-            double dy = point1.pos.y - point0.pos.y;
-            double dz = point1.pos.z - point0.pos.z;
+            Vector offset = new Vector(point1.pos.x - point0.pos.x, point1.pos.y - point0.pos.y, point1.pos.z - point0.pos.z) * percent;
+            return offset;
+        }
+        public void update()
+        {
             double distance = point0.distanceTo(point1);
             double difference = getLength() - distance;
             double percent = difference / distance / 2;
-            double offsetX = dx * percent;
-            double offsetY = dy * percent;
-            double offsetZ = dz * percent;
-
             if (!point0.pinned)
             {
-                point0.pos.x -= offsetX;
-                point0.pos.y -= offsetY;
-                point0.pos.z -= offsetZ;
+                point0.pos -= getOffset(percent);
             }
             if (!point1.pinned)
             {
-                point1.pos.x += offsetX;
-                point1.pos.y += offsetY;
-                point0.pos.z += offsetZ;
+                point1.pos += getOffset(percent);
             }
         }
     }

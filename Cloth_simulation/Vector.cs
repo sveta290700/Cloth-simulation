@@ -28,9 +28,9 @@ namespace Cloth_simulation
         }
         public Vector()
         {
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
+            x = 0;
+            y = 0;
+            z = 0;
         }
         public Vector(double x, double y, double z)
         {

@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Cloth_simulation
 {
-    public class ForceOfFriction : IForce
+    public class GravityForce : IForce
     {
-        public const double friction = 0.999;
+        public const double gravity = -0.5;
         public Vector Apply(Point point)
         {
-            Vector result = new Vector(point.vel.x, point.vel.y, point.vel.z);
-            result *= friction;
+            Vector result = new Vector(0,0, point.pos.z);
+            result.z += point.mass * gravity;
             return result;
         }
     }

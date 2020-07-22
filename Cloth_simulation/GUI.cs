@@ -12,8 +12,6 @@ namespace Cloth_simulation
 {
     public partial class GUI : Form
     {
-        public static int width = 684;
-        public static int height = 661;
         public GUI()
         {
             InitializeComponent();

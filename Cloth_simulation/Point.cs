@@ -13,76 +13,29 @@ namespace Cloth_simulation
             get => _pos;
             set => _pos = value;
         }
-
-        private Vector _vel;
-        public Vector vel
+        private Vector _oldPos;
+        public Vector oldPos 
         {
-            get => _vel;
-            set => _vel = value;
+            get => _oldPos;
+            set => _oldPos = value;
         }
-        private Vector _acc;
-        public Vector acc
-        {
-            get => _acc;
-            set => _acc = value;
-        }
-        private double _mass;
+        private double _mass = 2;
         public double mass
         {
             get => _mass;
-            set => _mass = value;
         }
-        private bool _pinned;
+        private bool _pinned = true;
         public bool pinned
         {
             get => _pinned;
             set => _pinned = value;
         }
+        public Spring[] connectedSprings = new Spring[3];
 
-        public Spring[] springsArray = new Spring[3];
-
-        public Point(double x, double y, double z, double mass)
+        public Point(double x = 0, double y = 0, double z = 0, double oldX = 0, double oldY = 0, double oldZ = 0, bool pinned = false)
         {
-            this.pos.x = x;
-            this.pos.y = y;
-            this.pos.z = z;
-            this.vel.x = 0;
-            this.vel.y = 0;
-            this.vel.z = 0;
-            this.mass = mass;
-            pinned = false;
-        }
-        public Point(double x, double y, double z, double mass, bool pinned)
-        {
-            this.pos.x = x;
-            this.pos.y = y;
-            this.pos.z = z;
-            this.vel.x = 0;
-            this.vel.y = 0;
-            this.vel.z = 0;
-            this.mass = mass;
-            this.pinned = pinned;
-        }
-        public Point(double x, double y, double z, double xVel, double yVel, double zVel, double mass)
-        {
-            this.pos.x = x;
-            this.pos.y = y;
-            this.pos.z = z;
-            this.vel.x = xVel;
-            this.vel.y = yVel;
-            this.vel.z = zVel;
-            this.mass = mass;
-            pinned = false;
-        }
-        public Point(double x, double y, double z, double xVel, double yVel, double zVel, double mass, bool pinned)
-        {
-            this.pos.x = x;
-            this.pos.y = y;
-            this.pos.z = z;
-            this.vel.x = xVel;
-            this.vel.y = yVel;
-            this.vel.z = zVel;
-            this.mass = mass;
+            pos = new Vector(x, y, z);
+            oldPos = new Vector(oldX, oldY, oldZ);
             this.pinned = pinned;
         }
         public double distanceTo(Point point)
@@ -93,37 +46,24 @@ namespace Cloth_simulation
             double result = Math.Sqrt(dx * dx + dy * dy + dz * dz);
             return result;
         }
-
-        public void updatePoint(double dt)
+        public Vector getVelocity()
+        {
+            Vector result = pos - oldPos;
+            return result;
+        }
+        public void updatePosition(Vector changePos)
         {
             if (!pinned)
             {
-                ForceOfFriction friction = new ForceOfFriction();
-                vel = friction.Apply(this);
-
-                Vector newPos = pos + vel * dt + acc * (dt * dt * 0.5);
-
-                ForceOfTension tension = new ForceOfTension();
-                pos += tension.Apply(this);
-
-                ForceOfGravity gravity = new ForceOfGravity();
-                Vector grav_acc = gravity.Apply(this);
-                DragForce drag = new DragForce();
-                Vector drag_force = drag.Apply(this);
-                Vector drag_acc = drag_force / mass;
-                Vector newAcc = grav_acc - drag_acc;
-
-                Vector newVel = vel + (acc + newAcc) * (dt * 0.5);
-                if (this.pos != newPos)
+                oldPos = pos;
+                pos = pos + getVelocity() + changePos;
+                if (oldPos != pos)
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        springsArray[i].length = -1;
+                        connectedSprings[i].length = -1;
                     }
                 }
-                pos = newPos;
-                vel = newVel;
-                acc = newAcc;
             }
         }
     }

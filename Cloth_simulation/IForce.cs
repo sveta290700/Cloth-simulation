@@ -8,6 +8,5 @@ namespace Cloth_simulation
     public interface IForce
     {
         Vector Apply(Point point);
-
     }
 }

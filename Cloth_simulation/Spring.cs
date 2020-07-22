@@ -17,10 +17,11 @@ namespace Cloth_simulation
         {
             get => _point1;
         }
-        private const double _tension_сoefficient = 0.2;
+        private static double _tension_сoefficient = 0.2;
         public double tension_сoefficient
         {
             get => _tension_сoefficient;
+            set => _tension_сoefficient = value;
         }
         private double _length;
         public double length
@@ -43,23 +44,28 @@ namespace Cloth_simulation
             }
             return length;
         }
-        private Vector getOffset(double percent)
+        private Vector getOffset()
         {
+            double percent = getPercent();
             Vector offset = new Vector(point1.pos.x - point0.pos.x, point1.pos.y - point0.pos.y, point1.pos.z - point0.pos.z) * percent;
             return offset;
         }
-        public void update()
+        private double getPercent()
         {
             double distance = point0.distanceTo(point1);
             double difference = getLength() - distance;
             double percent = difference / distance / 2;
+            return percent;
+        }
+        public void update()
+        {
             if (!point0.pinned)
             {
-                point0.pos -= getOffset(percent);
+                point0.applyOffset(getOffset(), true);
             }
             if (!point1.pinned)
             {
-                point1.pos += getOffset(percent);
+                point1.applyOffset(getOffset(), false);
             }
         }
     }

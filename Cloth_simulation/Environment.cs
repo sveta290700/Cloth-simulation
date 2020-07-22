@@ -13,36 +13,42 @@ namespace Cloth_simulation
         private const int height = 650;
         private const int depth = 300;
 
-        private long _lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        private long _lastTime;
         public long lastTime
         {
             get => _lastTime;
             set => _lastTime = value;
         }
 
-        private FrictionForce friction = new FrictionForce();
-        private TensionForce tension = new TensionForce();
-        private GravityForce gravity = new GravityForce();
-
-        public static int point_size = 2;
-        public static Point[] PointsArray = new Point[point_size];
-
-        public static void inputData()
+        private static List<Point> pointsCollection = new List<Point>();
+        private static IForce[] forces = new IForce [3];
+    
+       public Environment()
+       {
+            FrictionForce friction = new FrictionForce();
+            TensionForce tension = new TensionForce();
+            GravityForce gravity = new GravityForce();
+            forces[0] = friction;
+            forces[1] = tension;
+            forces[2] = gravity;
+            lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        }
+        public void inputData()
         {
             inputPoints();
             inputSprings();
         }
-        private static void inputPoints()
+        private void inputPoints()
         {
             Point point0 = new Point(100, 100, 100, 100, 100, 100);
-            PointsArray[0] = point0;
-            Point point1 = new Point(200, 100, 1000, 200, 100, 100);
-            PointsArray[1] = point1;
+            pointsCollection.Add(point0);
+            Point point1 = new Point(200, 100, 100, 200, 100, 100);
+            pointsCollection.Add(point1);
         }
-        private static void inputSprings()
+        private void inputSprings()
         {
-            PointsArray[0].connectedSprings[0] = new Spring(PointsArray[0], PointsArray[1]);
-            PointsArray[1].connectedSprings[0] = new Spring(PointsArray[0], PointsArray[1]);
+            pointsCollection[0].connectedSprings.Add(new Spring(pointsCollection[0], pointsCollection[1]));
+            pointsCollection[1].connectedSprings.Add(new Spring(pointsCollection[0], pointsCollection[1]));
         }
         private long getDelta(long lastSavedTime)
         {
@@ -53,32 +59,52 @@ namespace Cloth_simulation
         }
         public void tick()
         {
-            long dt = getDelta(lastTime);
+            long dt = getDelta(lastTime) % 10;
             for (int i = 0; i < dt; i++)
             {
-                tickPoints(PointsArray, dt);
+                verletIntegrationStep(dt);
             }
         }
-        private void tickPoints(Point[] PointsArray, double dt)
+        private void verletIntegrationStep(double dt)
         {
-            for (int i = 0; i < point_size; i++)
+            for (int i = 0; i < pointsCollection.Count; i++)
             {
-                PointsArray[i].updatePosition(getResultForce(PointsArray[i])*dt);
-                updateSprings(PointsArray[i].connectedSprings);
-                constrainPoint(PointsArray[i]);
+                Vector resultForce = getResultForce(pointsCollection[i]);
+                pointsCollection[i].updatePosition(resultForce*dt);
+                updateSprings(pointsCollection[i].connectedSprings);
+                constrainPoint(pointsCollection[i]);
             }
         }
-        private void updateSprings(Spring[] SpringsArray)
+        private void updateSprings(List<Spring> spring)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < spring.Count(); i++)
             {
-                SpringsArray[i].update();
+                spring[i].update();
             }
         }
         private Vector getResultForce(Point point)
         {
-            Vector resultForce = friction.Apply(point) + tension.Apply(point) + gravity.Apply(point);
+            Vector resultForce = new Vector();
+            foreach (IForce force in forces)
+            {
+                resultForce += force.Apply(point);
+            }
             return resultForce;
+        }
+        private void constrainXAxis(Point point, int limit)
+        {
+            point.pos.x = limit;
+            point.oldPos.x = point.pos.x + point.getVelocity().x;
+        }
+        private void constrainYAxis(Point point, int limit)
+        {
+            point.pos.y = limit;
+            point.oldPos.y = point.pos.y + point.getVelocity().y;
+        }
+        private void constrainZAxis(Point point, int limit)
+        {
+            point.pos.z = limit;
+            point.oldPos.z = point.pos.z + point.getVelocity().z;
         }
         private void constrainPoint(Point point)
         {
@@ -86,33 +112,27 @@ namespace Cloth_simulation
             {
                 if (point.pos.x > depth)
                 {
-                    point.pos.x = depth;
-                    point.oldPos.x = point.pos.x + point.getVelocity().x;
+                    constrainXAxis(point, depth);
                 }
                 else if (point.pos.x < 0)
                 {
-                    point.pos.x = 0;
-                    point.oldPos.x = point.pos.x + point.getVelocity().x;
+                    constrainXAxis(point, 0);
                 }
                 if (point.pos.y > width)
                 {
-                    point.pos.y = width;
-                    point.oldPos.y = point.pos.y + point.getVelocity().y;
+                    constrainYAxis(point, width);
                 }
                 else if (point.pos.y < 0)
                 {
-                    point.pos.y = 0;
-                    point.oldPos.y = point.pos.y + point.getVelocity().y;
+                    constrainYAxis(point, 0);
                 }
                 if (point.pos.z > height)
                 {
-                    point.pos.z = height;
-                    point.oldPos.z = point.pos.z + point.getVelocity().z;
+                    constrainZAxis(point, height);
                 }
                 else if (point.pos.z < 0)
                 {
-                    point.pos.z = 0;
-                    point.oldPos.z = point.pos.z + point.getVelocity().z;
+                    constrainZAxis(point, 0);
                 }
             }
         }

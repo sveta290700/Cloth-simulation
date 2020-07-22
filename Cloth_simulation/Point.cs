@@ -30,7 +30,8 @@ namespace Cloth_simulation
             get => _pinned;
             set => _pinned = value;
         }
-        public Spring[] connectedSprings = new Spring[3];
+
+        public List<Spring> connectedSprings = new List<Spring>();
 
         public Point(double x = 0, double y = 0, double z = 0, double oldX = 0, double oldY = 0, double oldZ = 0, bool pinned = false)
         {
@@ -51,6 +52,17 @@ namespace Cloth_simulation
             Vector result = pos - oldPos;
             return result;
         }
+        public void applyOffset(Vector offset, bool isNegative)
+        {
+            if (isNegative)
+            {
+                pos -= offset;
+            }
+            else
+            {
+                pos += offset;
+            }
+        }
         public void updatePosition(Vector changePos)
         {
             if (!pinned)
@@ -59,7 +71,7 @@ namespace Cloth_simulation
                 pos = pos + getVelocity() + changePos;
                 if (oldPos != pos)
                 {
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < connectedSprings.Count; i++)
                     {
                         connectedSprings[i].length = -1;
                     }

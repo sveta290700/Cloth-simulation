@@ -10,11 +10,12 @@ namespace Cloth_simulation
         public Vector Apply(Point point)
         {
             Vector result = new Vector();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < point.connectedSprings.Count; i++)
             {
-                double distance = point.connectedSprings[i].point0.distanceTo(point.connectedSprings[i].point1);
-                distance -= point.connectedSprings[i].getLength();
-                result += new Vector(distance, distance, distance) * point.connectedSprings[i].tension_сoefficient;
+                Spring spring = point.connectedSprings[i];
+                double distance = spring.point0.distanceTo(spring.point1);
+                distance -= spring.getLength();
+                result += new Vector(distance, distance, distance) * spring.tension_сoefficient * -1;
             }
             return result;
         }

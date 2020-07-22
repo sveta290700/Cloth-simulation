@@ -7,10 +7,10 @@ namespace Cloth_simulation
 {
     public class GravityForce : IForce
     {
-        public const double gravity = -0.5;
+        public const double gravity = -9.81;
         public Vector Apply(Point point)
         {
-            Vector result = new Vector(0,0, point.pos.z);
+            Vector result = new Vector();
             result.z += point.mass * gravity;
             return result;
         }

@@ -34,16 +34,9 @@ namespace Cloth_simulation
         {
             this._point0 = point0;
             this._point1 = point1;
-            this.length = -1;
+            this.length = point0.distanceTo(point1);
         }
-        public double getLength()
-        {
-            if (length == -1)
-            {
-                length = point0.distanceTo(point1);
-            }
-            return length;
-        }
+
         private Vector getOffset()
         {
             double percent = getPercent();
@@ -53,7 +46,7 @@ namespace Cloth_simulation
         private double getPercent()
         {
             double distance = point0.distanceTo(point1);
-            double difference = getLength() - distance;
+            double difference = length - distance;
             double percent = difference / distance / 2;
             return percent;
         }

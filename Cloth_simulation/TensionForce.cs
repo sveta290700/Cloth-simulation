@@ -14,7 +14,7 @@ namespace Cloth_simulation
             {
                 Spring spring = point.connectedSprings[i];
                 double distance = spring.point0.distanceTo(spring.point1);
-                distance -= spring.getLength();
+                distance -= spring.length;
                 result += new Vector(distance, distance, distance) * spring.tension_сoefficient * -1;
             }
             return result;

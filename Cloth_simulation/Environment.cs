@@ -59,7 +59,7 @@ namespace Cloth_simulation
         }
         public void tick()
         {
-            long dt = getDelta(lastTime) % 10;
+            long dt = getDelta(lastTime) % 100;
             for (int i = 0; i < dt; i++)
             {
                 verletIntegrationStep(dt);

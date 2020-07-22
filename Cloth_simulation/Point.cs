@@ -69,13 +69,6 @@ namespace Cloth_simulation
             {
                 oldPos = pos;
                 pos = pos + getVelocity() + changePos;
-                if (oldPos != pos)
-                {
-                    for (int i = 0; i < connectedSprings.Count; i++)
-                    {
-                        connectedSprings[i].length = -1;
-                    }
-                }
             }
         }
     }

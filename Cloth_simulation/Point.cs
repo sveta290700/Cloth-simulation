@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Cloth_simulation
@@ -19,7 +20,13 @@ namespace Cloth_simulation
             get => _oldPos;
             set => _oldPos = value;
         }
-        private float _mass = 2;
+        private float _radius;
+        public float radius
+        {
+            get => _radius;
+            set => _radius = value;
+        }
+        private float _mass = 2F;
         public float mass
         {
             get => _mass;
@@ -62,6 +69,10 @@ namespace Cloth_simulation
             {
                 pos += offset;
             }
+        }
+        public float getRadius()
+        {
+            return radius * Environment.depth / pos.x;
         }
         public void updatePosition(Vector changePos)
         {

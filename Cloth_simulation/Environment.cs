@@ -9,9 +9,21 @@ namespace Cloth_simulation
 {
     public class Environment
     {
-        private const int width = 650;
-        private const int height = 650;
-        private const int depth = 300;
+        private const int _width = 650;
+        public static long width
+        {
+            get => _width;
+        }
+        private const int _height = 650;
+        public static long height
+        {
+            get => _height;
+        }
+        private const int _depth = 300;
+        public static long depth
+        {
+            get => _depth;
+        }
 
         private long _lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         public long lastTime
@@ -92,44 +104,44 @@ namespace Cloth_simulation
             }
             return resultForce;
         }
-        private void constrainXAxis(Point point, int limit)
+        private void constrainXAxis(Point point, float limit)
         {
-            point.pos.x = limit;
+            point.pos.x = limit - point.radius;
             point.oldPos.x = point.pos.x + point.getVelocity().x;
         }
-        private void constrainYAxis(Point point, int limit)
+        private void constrainYAxis(Point point, float limit)
         {
-            point.pos.y = limit;
+            point.pos.y = limit - point.radius;
             point.oldPos.y = point.pos.y + point.getVelocity().y;
         }
-        private void constrainZAxis(Point point, int limit)
+        private void constrainZAxis(Point point, float limit)
         {
-            point.pos.z = limit;
+            point.pos.z = limit - point.radius;
             point.oldPos.z = point.pos.z + point.getVelocity().z;
         }
         private void constrainPoint(Point point)
         {
             if (!point.pinned)
             {
-                if (point.pos.x > depth)
+                if (point.pos.x > depth - point.radius)
                 {
-                    constrainXAxis(point, depth);
+                    constrainXAxis(point, depth - point.radius);
                 }
                 else if (point.pos.x < 0)
                 {
                     constrainXAxis(point, 0);
                 }
-                if (point.pos.y > width)
+                if (point.pos.y > width - point.radius)
                 {
-                    constrainYAxis(point, width);
+                    constrainYAxis(point, width - point.radius);
                 }
                 else if (point.pos.y < 0)
                 {
                     constrainYAxis(point, 0);
                 }
-                if (point.pos.z > height)
+                if (point.pos.z > height - point.radius)
                 {
-                    constrainZAxis(point, height);
+                    constrainZAxis(point, height - point.radius);
                 }
                 else if (point.pos.z < 0)
                 {
@@ -137,5 +149,6 @@ namespace Cloth_simulation
                 }
             }
         }
+
     }
 }

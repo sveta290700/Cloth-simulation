@@ -18,7 +18,6 @@ namespace Cloth_simulation
         public GUI()
         {
             environment.inputData();
-            environment.tick();
             InitializeComponent();
         }
 

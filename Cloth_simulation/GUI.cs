@@ -54,10 +54,11 @@ namespace Cloth_simulation
             for (int i = 0; i < environment.PointsCollection.Count; i++)
             {
                 Point point = environment.PointsCollection[i];
-                _graphics.DrawEllipse(pen, new RectangleF(point.pos.y - 5,
-                    point.pos.z - 5, 10, 10));
-                _graphics.FillEllipse(grayBrush, new RectangleF(point.pos.y - 5,
-                    point.pos.z - 5, 10, 10));
+                float radius = point.getRadius();
+                _graphics.DrawEllipse(pen, new RectangleF(point.pos.y - radius,
+                    point.pos.z - radius, 2 * radius, 2 * radius));
+                _graphics.FillEllipse(grayBrush, new RectangleF(point.pos.y - radius,
+                    point.pos.z - radius, 2 * radius, 2 * radius));
             }
         }
     }

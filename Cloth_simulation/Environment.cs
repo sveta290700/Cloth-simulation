@@ -49,16 +49,16 @@ namespace Cloth_simulation
             _pointsCollection[0].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
             _pointsCollection[1].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
         }
-        private long getDelta(long lastSavedTime)
+        private float getDelta(long lastSavedTime)
         {
             long time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             long deltaTime = time - lastSavedTime;
             lastTime = time;
-            return deltaTime;
+            return deltaTime / 1000f;
         }
         public void tick()
         {
-            long dt = getDelta(lastTime);
+            float dt = getDelta(lastTime);
             for (int i = 0; i < 2; i++)
             {
                 verletIntegrationStep(dt);

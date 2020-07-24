@@ -7,21 +7,21 @@ namespace Cloth_simulation
 {
     public class Vector
     {
-        private double _x;
-        public double x
+        private float _x;
+        public float x
         {
             get => _x;
             set => _x = value;
         }
-        private double _y;
-        public double y
+        private float _y;
+        public float y
         {
             get => _y;
             set => _y = value;
         }
 
-        private double _z;
-        public double z
+        private float _z;
+        public float z
         {
             get => _z;
             set => _z = value;
@@ -32,7 +32,7 @@ namespace Cloth_simulation
             y = 0;
             z = 0;
         }
-        public Vector(double x, double y, double z)
+        public Vector(float x, float y, float z)
         {
             this.x = x;
             this.y = y;
@@ -46,7 +46,7 @@ namespace Cloth_simulation
         }
         public static Vector operator +(Vector a, Vector b) => new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
-        public static Vector operator *(Vector a, double num) => new Vector(a.x * num, a.y * num, a.z * num);
-        public static Vector operator /(Vector a, double num) => new Vector(a.x / num, a.y / num, a.z / num);
+        public static Vector operator *(Vector a, float num) => new Vector(a.x * num, a.y * num, a.z * num);
+        public static Vector operator /(Vector a, float num) => new Vector(a.x / num, a.y / num, a.z / num);
     }
 }

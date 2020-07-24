@@ -8,3 +8,12 @@ D:\SVETA@mail.ru - ЛИЧНАЯ ПАПКА\всякое\ДВФУ\Cloth-simulatio
 D:\SVETA@mail.ru - ЛИЧНАЯ ПАПКА\всякое\ДВФУ\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.exe
 D:\SVETA@mail.ru - ЛИЧНАЯ ПАПКА\всякое\ДВФУ\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.pdb
 D:\SVETA@mail.ru - ЛИЧНАЯ ПАПКА\всякое\ДВФУ\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.GUI.resources
+D:\Cloth-simulation\Cloth_simulation\bin\Debug\Cloth_simulation.exe.config
+D:\Cloth-simulation\Cloth_simulation\bin\Debug\Cloth_simulation.exe
+D:\Cloth-simulation\Cloth_simulation\bin\Debug\Cloth_simulation.pdb
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.csprojAssemblyReference.cache
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.GUI.resources
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.Properties.Resources.resources
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.csproj.GenerateResource.cache
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.exe
+D:\Cloth-simulation\Cloth_simulation\obj\Debug\Cloth_simulation.pdb

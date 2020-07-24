@@ -7,7 +7,7 @@ namespace Cloth_simulation
 {
     public class FrictionForce : IForce
     {
-        public const double friction = -0.01;
+        public const float friction = -0.01F;
         public Vector Apply(Point point)
         {
             Vector result = point.getVelocity();

@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,25 +13,24 @@ namespace Cloth_simulation
         private const int height = 650;
         private const int depth = 300;
 
-        private long _lastTime;
+        private long _lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         public long lastTime
         {
             get => _lastTime;
             set => _lastTime = value;
         }
 
-        private static List<Point> pointsCollection = new List<Point>();
-        private static IForce[] forces = new IForce [3];
-    
-       public Environment()
-       {
-            FrictionForce friction = new FrictionForce();
-            TensionForce tension = new TensionForce();
-            GravityForce gravity = new GravityForce();
-            forces[0] = friction;
-            forces[1] = tension;
-            forces[2] = gravity;
-            lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        private List<Point> _pointsCollection = new List<Point>();
+        private List<IForce> _forcesCollection = new List<IForce>();
+        public List<Point> PointsCollection => _pointsCollection;
+
+        public List<IForce> ForcesCollection => _forcesCollection;
+
+        public Environment() 
+        { 
+           _forcesCollection.Add(new FrictionForce()); 
+           _forcesCollection.Add(new TensionForce()); 
+           _forcesCollection.Add(new GravityForce());
         }
         public void inputData()
         {
@@ -41,14 +40,14 @@ namespace Cloth_simulation
         private void inputPoints()
         {
             Point point0 = new Point(100, 100, 100, 100, 100, 100);
-            pointsCollection.Add(point0);
+            _pointsCollection.Add(point0);
             Point point1 = new Point(200, 100, 100, 200, 100, 100);
-            pointsCollection.Add(point1);
+            _pointsCollection.Add(point1);
         }
         private void inputSprings()
         {
-            pointsCollection[0].connectedSprings.Add(new Spring(pointsCollection[0], pointsCollection[1]));
-            pointsCollection[1].connectedSprings.Add(new Spring(pointsCollection[0], pointsCollection[1]));
+            _pointsCollection[0].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
+            _pointsCollection[1].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
         }
         private long getDelta(long lastSavedTime)
         {
@@ -59,20 +58,20 @@ namespace Cloth_simulation
         }
         public void tick()
         {
-            long dt = getDelta(lastTime) % 100;
-            for (int i = 0; i < dt; i++)
+            long dt = getDelta(lastTime);
+            for (int i = 0; i < 2; i++)
             {
                 verletIntegrationStep(dt);
             }
         }
-        private void verletIntegrationStep(double dt)
+        private void verletIntegrationStep(float dt)
         {
-            for (int i = 0; i < pointsCollection.Count; i++)
+            for (int i = 0; i < _pointsCollection.Count; i++)
             {
-                Vector resultForce = getResultForce(pointsCollection[i]);
-                pointsCollection[i].updatePosition(resultForce*dt);
-                updateSprings(pointsCollection[i].connectedSprings);
-                constrainPoint(pointsCollection[i]);
+                Vector resultForce = getResultForce(_pointsCollection[i]);
+                _pointsCollection[i].updatePosition(resultForce*dt);
+                updateSprings(_pointsCollection[i].connectedSprings);
+                constrainPoint(_pointsCollection[i]);
             }
         }
         private void updateSprings(List<Spring> spring)
@@ -85,7 +84,7 @@ namespace Cloth_simulation
         private Vector getResultForce(Point point)
         {
             Vector resultForce = new Vector();
-            foreach (IForce force in forces)
+            foreach (IForce force in _forcesCollection)
             {
                 resultForce += force.Apply(point);
             }

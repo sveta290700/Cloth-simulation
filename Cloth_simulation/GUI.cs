@@ -12,12 +12,33 @@ namespace Cloth_simulation
 {
     public partial class GUI : Form
     {
+
+        private Environment environment = new Environment();
+
         public GUI()
         {
-            Environment e = new Environment();
-            e.inputData();
-            e.tick();
+            environment.inputData();
+            environment.tick();
             InitializeComponent();
+        }
+
+        private void GUI_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            environment.tick();
+            SolidBrush myBrush = new SolidBrush(Color.Black);
+            Pen pen = new Pen(myBrush);
+            for (int i = 0; i < environment.PointsCollection.Count; i++)
+            {
+                Point point = environment.PointsCollection[i];
+                panel1.CreateGraphics().DrawEllipse(pen, new RectangleF(point.pos.y - 5,
+                     point.pos.z - 5, 10, 10));
+            }
+            
         }
     }
 }

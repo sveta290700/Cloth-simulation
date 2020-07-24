@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Wintermute\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Wintermute\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Cloth_simulation.1851358882.00" t="ExcludeRecursive" />
+    <e p="D:\Cloth-simulation" t="IncludeFlat">
+      <e p="Cloth_simulation" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Cloth_simulation.csproj" t="IncludeRecursive" />
+        <e p="Environment.cs" t="Include" />
+        <e p="FrictionForce.cs" t="Include" />
+        <e p="GravityForce.cs" t="Include" />
+        <e p="GUI.cs" t="Include" />
+        <e p="GUI.Designer.cs" t="Include" />
+        <e p="GUI.resx" t="Include" />
+        <e p="IForce.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Point.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Spring.cs" t="Include" />
+        <e p="TensionForce.cs" t="Include" />
+        <e p="Vector.cs" t="Include" />
+      </e>
+      <e p="Cloth_simulation.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

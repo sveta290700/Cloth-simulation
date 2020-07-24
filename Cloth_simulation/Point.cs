@@ -19,8 +19,8 @@ namespace Cloth_simulation
             get => _oldPos;
             set => _oldPos = value;
         }
-        private double _mass = 2;
-        public double mass
+        private float _mass = 2;
+        public float mass
         {
             get => _mass;
         }
@@ -33,18 +33,18 @@ namespace Cloth_simulation
 
         public List<Spring> connectedSprings = new List<Spring>();
 
-        public Point(double x = 0, double y = 0, double z = 0, double oldX = 0, double oldY = 0, double oldZ = 0, bool pinned = false)
+        public Point(float x = 0, float y = 0, float z = 0, float oldX = 0, float oldY = 0, float oldZ = 0, bool pinned = false)
         {
             pos = new Vector(x, y, z);
             oldPos = new Vector(oldX, oldY, oldZ);
             this.pinned = pinned;
         }
-        public double distanceTo(Point point)
+        public float distanceTo(Point point)
         {
-            double dx = point.pos.x - pos.x;
-            double dy = point.pos.y - pos.y;
-            double dz = point.pos.z - pos.z;
-            double result = Math.Sqrt(dx * dx + dy * dy + dz * dz);
+            float dx = point.pos.x - pos.x;
+            float dy = point.pos.y - pos.y;
+            float dz = point.pos.z - pos.z;
+            float result = (float) Math.Sqrt(dx * dx + dy * dy + dz * dz);
             return result;
         }
         public Vector getVelocity()

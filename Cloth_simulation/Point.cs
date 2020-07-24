@@ -20,8 +20,8 @@ namespace Cloth_simulation
             get => _oldPos;
             set => _oldPos = value;
         }
-        private float _radius;
-        public float radius
+        private float _radius = 5F;
+        public float radius 
         {
             get => _radius;
             set => _radius = value;

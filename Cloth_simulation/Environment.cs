@@ -52,9 +52,9 @@ namespace Cloth_simulation
         }
         private void inputPoints()
         {
-            Point point0 = new Point(100, 300, 100, 100, 300, 100);
+            Point point0 = new Point(100, 300, 200, 100, 300, 100);
             _pointsCollection.Add(point0);
-            Point point1 = new Point(200, 100, 100, 200, 100, 100);
+            Point point1 = new Point(200, 200, 100, 100, 200, 100);
             _pointsCollection.Add(point1);
         }
         private void inputSprings()
@@ -68,7 +68,7 @@ namespace Cloth_simulation
             long time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             long deltaTime = time - lastSavedTime;
             lastTime = time;
-            return deltaTime / 1000f;
+            return deltaTime / 100f;
         }
         public void tick()
         {
@@ -106,42 +106,45 @@ namespace Cloth_simulation
         }
         private void constrainXAxis(Point point, float limit)
         {
-            point.pos.x = limit - point.radius;
+            point.pos.x = limit;
             point.oldPos.x = point.pos.x + point.getVelocity().x;
         }
         private void constrainYAxis(Point point, float limit)
         {
-            point.pos.y = limit - point.radius;
+            point.pos.y = limit;
             point.oldPos.y = point.pos.y + point.getVelocity().y;
         }
         private void constrainZAxis(Point point, float limit)
         {
-            point.pos.z = limit - point.radius;
+            point.pos.z = limit;
             point.oldPos.z = point.pos.z + point.getVelocity().z;
         }
         private void constrainPoint(Point point)
         {
             if (!point.pinned)
             {
-                if (point.pos.x > depth - point.radius)
+                float limitDepth = depth - point.getRadius();
+                if (point.pos.x > limitDepth)
                 {
-                    constrainXAxis(point, depth - point.radius);
+                    constrainXAxis(point, limitDepth);
                 }
                 else if (point.pos.x < 0)
                 {
                     constrainXAxis(point, 0);
                 }
-                if (point.pos.y > width - point.radius)
+                float limitWidth = width - point.getRadius();
+                if (point.pos.y > limitWidth)
                 {
-                    constrainYAxis(point, width - point.radius);
+                    constrainYAxis(point, limitWidth);
                 }
                 else if (point.pos.y < 0)
                 {
                     constrainYAxis(point, 0);
                 }
-                if (point.pos.z > height - point.radius)
+                float limitHeight = height - point.getRadius();
+                if (point.pos.z > limitHeight)
                 {
-                    constrainZAxis(point, height - point.radius);
+                    constrainZAxis(point, limitHeight);
                 }
                 else if (point.pos.z < 0)
                 {

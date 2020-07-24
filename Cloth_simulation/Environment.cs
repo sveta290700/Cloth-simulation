@@ -21,10 +21,11 @@ namespace Cloth_simulation
         }
 
         private List<Point> _pointsCollection = new List<Point>();
+        private List<Spring> _springsCollection = new List<Spring>();
         private List<IForce> _forcesCollection = new List<IForce>();
         public List<Point> PointsCollection => _pointsCollection;
-
         public List<IForce> ForcesCollection => _forcesCollection;
+        public List<Spring> SpringsCollection => _springsCollection;
 
         public Environment() 
         { 
@@ -39,13 +40,14 @@ namespace Cloth_simulation
         }
         private void inputPoints()
         {
-            Point point0 = new Point(100, 100, 100, 100, 100, 100);
+            Point point0 = new Point(100, 300, 100, 100, 300, 100);
             _pointsCollection.Add(point0);
             Point point1 = new Point(200, 100, 100, 200, 100, 100);
             _pointsCollection.Add(point1);
         }
         private void inputSprings()
         {
+            _springsCollection.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
             _pointsCollection[0].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
             _pointsCollection[1].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
         }

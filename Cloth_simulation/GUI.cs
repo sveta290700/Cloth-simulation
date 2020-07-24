@@ -15,6 +15,10 @@ namespace Cloth_simulation
 
         private Environment environment = new Environment();
         private Graphics _graphics;
+        private SolidBrush backBrush = new SolidBrush(Color.White);
+        private SolidBrush grayBrush = new SolidBrush(Color.Gray);
+        private Pen grayPen = new Pen(Color.Gray);
+        Pen pen = new Pen(Color.Black);
 
         public GUI()
         {
@@ -37,14 +41,22 @@ namespace Cloth_simulation
         private void timer1_Tick(object sender, EventArgs e)
         {
             environment.tick();
-            SolidBrush myBrush = new SolidBrush(Color.Black);
-            Pen pen = new Pen(myBrush);
-            SolidBrush backBrush = new SolidBrush(Color.White);
-            _graphics.FillRectangle(backBrush, 0, 0, panel1.Width, panel1.Height); 
+            
+            _graphics.FillRectangle(backBrush, 0, 0, panel1.Width, panel1.Height);
+            
+            for (int i = 0; i < environment.SpringsCollection.Count; i++)
+            {
+                Spring spring = environment.SpringsCollection[i];
+                _graphics.DrawLine(grayPen, spring.point0.pos.y, spring.point0.pos.z, 
+                    spring.point1.pos.y, spring.point1.pos.z);
+            }
+            
             for (int i = 0; i < environment.PointsCollection.Count; i++)
             {
                 Point point = environment.PointsCollection[i];
                 _graphics.DrawEllipse(pen, new RectangleF(point.pos.y - 5,
+                    point.pos.z - 5, 10, 10));
+                _graphics.FillEllipse(grayBrush, new RectangleF(point.pos.y - 5,
                     point.pos.z - 5, 10, 10));
             }
         }

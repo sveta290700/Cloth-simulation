@@ -7,6 +7,8 @@ namespace Cloth_simulation
 {
     public class TensionForce : IForce
     {
+        private ForceCoefficient forceCoefficient;
+        ForceCoefficient IForce.forceCoefficient { get => forceCoefficient; set => forceCoefficient = value; }
         public Vector Apply(Point point)
         {
             Vector result = new Vector();
@@ -15,7 +17,7 @@ namespace Cloth_simulation
                 Spring spring = point.connectedSprings[i];
                 float distance = spring.point0.distanceTo(spring.point1);
                 distance -= spring.length;
-                result += new Vector(distance, distance, distance) * spring.TensionСoefficient * -1;
+                result += new Vector(distance, distance, distance) * spring.tensionСoefficient * -1;
             }
             return result;
         }

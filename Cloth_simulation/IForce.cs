@@ -7,6 +7,7 @@ namespace Cloth_simulation
 {
     public interface IForce
     {
+        ForceCoefficient forceCoefficient { get; set; }
         Vector Apply(Point point);
     }
 }

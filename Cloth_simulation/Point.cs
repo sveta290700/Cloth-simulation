@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Cloth_simulation
@@ -21,7 +20,7 @@ namespace Cloth_simulation
             set => _oldPos = value;
         }
         private float _radius = 5F;
-        public float radius 
+        public float radius
         {
             get => _radius;
             set => _radius = value;
@@ -72,14 +71,24 @@ namespace Cloth_simulation
         }
         public float getRadius()
         {
-            return radius * Environment.depth / pos.x;
+            return radius * Environment.getDepth() / pos.x;
+        }
+        public bool isPinned()
+        {
+            return pinned;
+        }
+        public void setPin()
+        {
+            if (!isPinned())
+            pinned = true;
         }
         public void updatePosition(Vector changePos)
         {
-            if (!pinned)
+            if (!isPinned())
             {
+                Vector velocity = getVelocity();
                 oldPos = pos;
-                pos = pos + getVelocity() + changePos;
+                pos = pos + velocity + changePos;
             }
         }
     }

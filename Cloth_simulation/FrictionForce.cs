@@ -7,11 +7,18 @@ namespace Cloth_simulation
 {
     public class FrictionForce : IForce
     {
-        public const float friction = -0.01F;
+        private ForceCoefficient forceCoefficient;
+        ForceCoefficient IForce.forceCoefficient { get => forceCoefficient; set => forceCoefficient = value; }
+
+        public FrictionForce()
+        {
+            forceCoefficient = new ForceCoefficient(-0.01F, "Friction force");
+        }
+
         public Vector Apply(Point point)
         {
             Vector result = point.getVelocity();
-            result *= friction;
+            result *= forceCoefficient.coefficient;
             return result;
         }
     }

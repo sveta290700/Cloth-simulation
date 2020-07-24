@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Environment.cs" />
+    <Compile Include="ForceCoefficient.cs" />
     <Compile Include="FrictionForce.cs" />
     <Compile Include="GravityForce.cs" />
     <Compile Include="TensionForce.cs" />

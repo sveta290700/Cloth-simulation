@@ -7,11 +7,16 @@ namespace Cloth_simulation
 {
     public class GravityForce : IForce
     {
-        public const float gravity = 10F;
+        private ForceCoefficient forceCoefficient;
+        ForceCoefficient IForce.forceCoefficient { get => forceCoefficient; set => forceCoefficient = value; }
+        public GravityForce()
+        {
+            forceCoefficient = new ForceCoefficient(10F, "Gravity force");
+        }
         public Vector Apply(Point point)
         {
             Vector result = new Vector();
-            result.z += point.mass * gravity;
+            result.z += point.mass * forceCoefficient.coefficient;
             return result;
         }
     }

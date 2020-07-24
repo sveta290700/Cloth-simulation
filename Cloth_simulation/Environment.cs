@@ -9,29 +9,30 @@ namespace Cloth_simulation
 {
     public class Environment
     {
-        private const int _width = 650;
-        public static long width
+        private int _width = 1200;
+        public int width
         {
             get => _width;
+            set => _width = value;
         }
-        private const int _height = 650;
-        public static long height
+        private int _height = 700;
+        public int height
         {
             get => _height;
+            set => _height = value;
         }
-        private const int _depth = 300;
-        public static long depth
+        private static int _depth = 200;
+        public int depth
         {
             get => _depth;
+            set => _depth = value;
         }
-
         private long _lastTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         public long lastTime
         {
             get => _lastTime;
             set => _lastTime = value;
         }
-
         private List<Point> _pointsCollection = new List<Point>();
         private List<Spring> _springsCollection = new List<Spring>();
         private List<IForce> _forcesCollection = new List<IForce>();
@@ -40,10 +41,24 @@ namespace Cloth_simulation
         public List<Spring> SpringsCollection => _springsCollection;
 
         public Environment() 
-        { 
-           _forcesCollection.Add(new FrictionForce()); 
-           _forcesCollection.Add(new TensionForce()); 
-           _forcesCollection.Add(new GravityForce());
+        {
+            FrictionForce frictionForce = new FrictionForce();
+           _forcesCollection.Add(frictionForce);
+            TensionForce tensionForce = new TensionForce();
+           _forcesCollection.Add(tensionForce);
+            GravityForce gravityForce = new GravityForce();
+           _forcesCollection.Add(gravityForce);
+        }
+
+        public static int getDepth()
+        {
+            return _depth;
+        }
+        public void changeSize(int depth, int width, int height)
+        {
+            this.depth = depth;
+            this.width = width;
+            this.height = height;
         }
         public void inputData()
         {
@@ -52,16 +67,108 @@ namespace Cloth_simulation
         }
         private void inputPoints()
         {
-            Point point0 = new Point(100, 300, 200, 100, 300, 100);
+            Point point0 = new Point(100, 300, 200, 100, 300, 100, true);
             _pointsCollection.Add(point0);
-            Point point1 = new Point(200, 200, 100, 100, 200, 100);
+            Point point1 = new Point(150, 200, 100, 100, 200, 100);
             _pointsCollection.Add(point1);
+        }
+        public void addPoint(Point point)
+        {
+            PointsCollection.Add(point);
+        }
+        public void removePoint(Point point)
+        {
+            PointsCollection.Remove(point);
+        }
+        public int pointsSize()
+        {
+            return PointsCollection.Count();
         }
         private void inputSprings()
         {
             _springsCollection.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
             _pointsCollection[0].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
             _pointsCollection[1].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
+        }
+        public void addSpring(Spring spring)
+        {
+            SpringsCollection.Add(spring);
+            spring.point0.connectedSprings.Add(spring);
+            spring.point1.connectedSprings.Add(spring);
+        }
+        public void addSpring(Point point0, Point point1)
+        {
+            Spring spring = new Spring(point0, point1);
+            SpringsCollection.Add(spring);
+            point0.connectedSprings.Add(spring);
+            point1.connectedSprings.Add(spring);
+        }
+        public bool removeSpring(Spring spring)
+        {
+            bool result = SpringsCollection.Remove(spring);
+            if (result)
+            {
+                spring.point0.connectedSprings.Remove(spring);
+                spring.point1.connectedSprings.Remove(spring);
+            }
+            return result;
+        }
+        public bool removeSpring(Point point0, Point point1)
+        {
+            Spring spring = new Spring(point0, point1);
+            bool result = SpringsCollection.Remove(spring);
+            if (result)
+            {
+                point0.connectedSprings.Remove(spring);
+                point1.connectedSprings.Remove(spring);
+            }
+            return result;
+        }
+        public int springsSize()
+        {
+            return SpringsCollection.Count();
+        }
+        public int pointSpringsSize(Point point)
+        {
+            return point.connectedSprings.Count();
+        }
+        public Point[] PointsArray()
+        {
+            return PointsCollection.ToArray();
+        }
+        public Spring[] SpringsArray()
+        {
+            return SpringsCollection.ToArray();
+        }
+        public Spring[] pointSpringsArray(Point point)
+        {
+            return point.connectedSprings.ToArray();
+        }
+        public void pinPoint(Point point)
+        {
+            point.setPin();
+        }
+        public ForceCoefficient changeForceCoefficient(IForce force, float newCoefficientValue)
+        {
+            force.forceCoefficient.coefficient = newCoefficientValue;
+            return force.forceCoefficient;
+        }
+        public Point findNearestPoint(float y, float z)
+        {
+            Point result = new Point();
+            float min = 999999;
+            Point comparedPoint = new Point(0, y, z);
+            foreach (Point point in PointsCollection)
+            {
+                Point pointWithoutX = new Point(0, point.pos.y, point.pos.z);
+                float distance = comparedPoint.distanceTo(pointWithoutX);
+                if (min > distance)
+                {
+                    min = distance;
+                    result = point;
+                }
+            }
+            return result;
         }
         private float getDelta(long lastSavedTime)
         {
@@ -73,19 +180,22 @@ namespace Cloth_simulation
         public void tick()
         {
             float dt = getDelta(lastTime);
-            for (int i = 0; i < 2; i++)
-            {
-                verletIntegrationStep(dt);
-            }
+            verletIntegrationStep(dt);
         }
         private void verletIntegrationStep(float dt)
         {
             for (int i = 0; i < _pointsCollection.Count; i++)
             {
                 Vector resultForce = getResultForce(_pointsCollection[i]);
-                _pointsCollection[i].updatePosition(resultForce*dt);
-                updateSprings(_pointsCollection[i].connectedSprings);
-                constrainPoint(_pointsCollection[i]);
+                _pointsCollection[i].updatePosition(resultForce * dt);
+                for (int j = 0; j < 4; j++)
+                {
+                    for (int k = 0; k < _pointsCollection.Count; k++)
+                    {
+                        updateSprings(_pointsCollection[k].connectedSprings);
+                        constrainPoint(_pointsCollection[k]);
+                    }
+                }
             }
         }
         private void updateSprings(List<Spring> spring)
@@ -104,51 +214,52 @@ namespace Cloth_simulation
             }
             return resultForce;
         }
-        private void constrainXAxis(Point point, float limit)
+        private void constrainXAxis(Point point, float velX, float limit)
         {
             point.pos.x = limit;
-            point.oldPos.x = point.pos.x + point.getVelocity().x;
+            point.oldPos.x = point.pos.x + velX;
         }
-        private void constrainYAxis(Point point, float limit)
+        private void constrainYAxis(Point point, float velY, float limit)
         {
             point.pos.y = limit;
-            point.oldPos.y = point.pos.y + point.getVelocity().y;
+            point.oldPos.y = point.pos.y + velY;
         }
-        private void constrainZAxis(Point point, float limit)
+        private void constrainZAxis(Point point, float velZ, float limit)
         {
             point.pos.z = limit;
-            point.oldPos.z = point.pos.z + point.getVelocity().z;
+            point.oldPos.z = point.pos.z + velZ;
         }
         private void constrainPoint(Point point)
         {
             if (!point.pinned)
             {
                 float limitDepth = depth - point.getRadius();
+                Vector velocity = point.getVelocity();
                 if (point.pos.x > limitDepth)
                 {
-                    constrainXAxis(point, limitDepth);
+                    constrainXAxis(point, velocity.x, limitDepth);
                 }
                 else if (point.pos.x < 0)
                 {
-                    constrainXAxis(point, 0);
+                    constrainXAxis(point, velocity.x, 0);
                 }
                 float limitWidth = width - point.getRadius();
                 if (point.pos.y > limitWidth)
                 {
-                    constrainYAxis(point, limitWidth);
+                    constrainYAxis(point, velocity.y, limitWidth);
                 }
                 else if (point.pos.y < 0)
                 {
-                    constrainYAxis(point, 0);
+                    constrainYAxis(point, velocity.y, 0);
                 }
                 float limitHeight = height - point.getRadius();
                 if (point.pos.z > limitHeight)
                 {
-                    constrainZAxis(point, limitHeight);
+                    constrainZAxis(point, velocity.z, limitHeight);
                 }
                 else if (point.pos.z < 0)
                 {
-                    constrainZAxis(point, 0);
+                    constrainZAxis(point, velocity.z, 0);
                 }
             }
         }

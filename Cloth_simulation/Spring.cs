@@ -18,7 +18,7 @@ namespace Cloth_simulation
             get => _point1;
         }
         private static float _tensionСoefficient = 0.2F;
-        public float TensionСoefficient
+        public float tensionСoefficient
         {
             get => _tensionСoefficient;
             set => _tensionСoefficient = value;
@@ -52,11 +52,11 @@ namespace Cloth_simulation
         }
         public void update()
         {
-            if (!point0.pinned)
+            if (!point0.isPinned())
             {
                 point0.applyOffset(getOffset(), true);
             }
-            if (!point1.pinned)
+            if (!point1.isPinned())
             {
                 point1.applyOffset(getOffset(), false);
             }

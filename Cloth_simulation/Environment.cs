@@ -42,18 +42,70 @@ namespace Cloth_simulation
 
         public Environment() 
         {
-            FrictionForce frictionForce = new FrictionForce();
-           _forcesCollection.Add(frictionForce);
             TensionForce tensionForce = new TensionForce();
             _forcesCollection.Add(tensionForce);
             GravityForce gravityForce = new GravityForce();
            _forcesCollection.Add(gravityForce);
+           FrictionForce frictionForce = new FrictionForce();
+           _forcesCollection.Add(frictionForce);
         }
 
         public static int getDepth()
         {
             return _depth;
         }
+        
+        public void CreateCloth(int width, int height, int locked)
+        {
+            Point[,] points = new Point[width, height];
+            Vector offset = new Vector(this._width / 100, this._height / 100, 0);
+            Vector dimensions = new Vector(9 * this._width / 10, 2 * this._height / 3, 0);
+            Vector step = new Vector(dimensions.x / (width), dimensions.y / (height), 0);
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    float x = step.x + step.x * i + offset.x;
+                    float y = step.y + step.y * j + offset.y;
+                    Point point = new Point(depth / 2, x, y, depth / 2, x, y);
+                    if (j == 0 && i % locked == 0)
+                    {
+                        point.pinned = true;
+                    }
+
+                    points[i, j] = point;
+                    addPoint(point);
+                }
+            }
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Point p1 = points[i, j];
+                    if (i + 1 < width)
+                    {
+                        addSpring(p1, points[i + 1, j]);
+                    }
+
+                    if (j + 1 < height)
+                    {
+                        addSpring(p1, points[i, j + 1]);
+                    }
+
+                    if (i + 1 < width && j + 1 < height)
+                    {
+                        addSpring(p1, points[i + 1, j + 1]);
+                    }
+                    
+                    if (i + 1 < width && j - 1 >= 0)
+                    {
+                        addSpring(p1, points[i + 1, j - 1]);
+                    }
+                }
+            }
+        }
+        
         public void changeSize(int depth, int width, int height)
         {
             this.depth = depth;
@@ -188,7 +240,7 @@ namespace Cloth_simulation
             {
                 Vector resultForce = getResultForce(_pointsCollection[i]);
                 _pointsCollection[i].updatePosition(resultForce, dt);
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 1; j++)
                 {
                     for (int k = 0; k < _pointsCollection.Count; k++)
                     {

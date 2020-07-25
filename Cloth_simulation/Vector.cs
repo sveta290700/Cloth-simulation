@@ -44,7 +44,17 @@ namespace Cloth_simulation
             y = anotherVector.y;
             z = anotherVector.z;
         }
-
+        private float getLength()
+        {
+            return (float)Math.Sqrt((x * x) + (y * y) + (z * z));
+        }
+        public void normalize()
+        {
+            float length = getLength();
+            x /= length;
+            y /= length;
+            z /= length;
+        }
         public static Vector operator +(Vector a, Vector b) => new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
         public static Vector operator *(Vector a, float num) => new Vector(a.x * num, a.y * num, a.z * num);

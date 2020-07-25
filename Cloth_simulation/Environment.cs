@@ -187,22 +187,14 @@ namespace Cloth_simulation
             for (int i = 0; i < _pointsCollection.Count; i++)
             {
                 Vector resultForce = getResultForce(_pointsCollection[i]);
-                _pointsCollection[i].updatePosition(resultForce * dt);
+                _pointsCollection[i].updatePosition(resultForce, dt);
                 for (int j = 0; j < 2; j++)
                 {
                     for (int k = 0; k < _pointsCollection.Count; k++)
                     {
-                        updateSprings(_pointsCollection[k].connectedSprings);
                         constrainPoint(_pointsCollection[k]);
                     }
                 }
-            }
-        }
-        private void updateSprings(List<Spring> spring)
-        {
-            for (int i = 0; i < spring.Count(); i++)
-            {
-                spring[i].update();
             }
         }
         private Vector getResultForce(Point point)
@@ -233,39 +225,36 @@ namespace Cloth_simulation
         {
             if (!point.pinned)
             {
+                float min = point.getRadius();
                 float maxDepth = depth - point.getRadius();
-                float minDepth = point.getRadius();
                 Vector velocity = point.getVelocity();
                 if (point.pos.x > maxDepth)
                 {
                     constrainXAxis(point, velocity.x, maxDepth);
                 }
-                else if (point.pos.x < minDepth)
+                else if (point.pos.x < min)
                 {
-                    constrainXAxis(point, velocity.x, minDepth);
+                    constrainXAxis(point, velocity.x, min);
                 }
                 float maxWidth = width - point.getRadius();
-                float minWidth = point.getRadius();
                 if (point.pos.y > maxWidth)
                 {
                     constrainYAxis(point, velocity.y, maxWidth);
                 }
-                else if (point.pos.y < minWidth)
+                else if (point.pos.y < min)
                 {
-                    constrainYAxis(point, velocity.y, minWidth);
+                    constrainYAxis(point, velocity.y, min);
                 }
                 float maxHeight = height - point.getRadius();
-                float minHeight = point.getRadius();
                 if (point.pos.z > maxHeight)
                 {
                     constrainZAxis(point, velocity.z, maxHeight);
                 }
-                else if (point.pos.z < minHeight)
+                else if (point.pos.z < min)
                 {
-                    constrainZAxis(point, velocity.z, minHeight);
+                    constrainZAxis(point, velocity.z, min);
                 }
             }
         }
-
     }
 }

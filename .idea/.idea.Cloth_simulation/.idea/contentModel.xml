@@ -9,6 +9,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="Cloth_simulation.csproj" t="IncludeRecursive" />
         <e p="Environment.cs" t="Include" />
+        <e p="ForceCoefficient.cs" t="Include" />
         <e p="FrictionForce.cs" t="Include" />
         <e p="GravityForce.cs" t="Include" />
         <e p="GUI.cs" t="Include" />

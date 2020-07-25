@@ -11,7 +11,7 @@ namespace Cloth_simulation
         ForceCoefficient IForce.forceCoefficient { get => forceCoefficient; set => forceCoefficient = value; }
         public GravityForce()
         {
-            forceCoefficient = new ForceCoefficient(10F, "Gravity force");
+            forceCoefficient = new ForceCoefficient(5F, "Gravity force");
         }
         public Vector Apply(Point point)
         {

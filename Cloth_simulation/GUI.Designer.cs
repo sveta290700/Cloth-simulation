@@ -23,8 +23,8 @@
         #region Код, автоматически созданный конструктором форм Windows
 
         /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -35,22 +35,20 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(21, 12);
+            this.panel1.Location = new System.Drawing.Point(24, 14);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1200, 700);
+            this.panel1.Size = new System.Drawing.Size(1400, 808);
             this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            //this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // timer1
             // 
-            this.timer1.Interval = 33;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // GUI
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1280, 720);
+            this.ClientSize = new System.Drawing.Size(1493, 831);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "GUI";
@@ -58,7 +56,6 @@
             this.Text = "Cloth simulation";
             this.Load += new System.EventHandler(this.GUI_Load);
             this.ResumeLayout(false);
-
         }
 
         #endregion

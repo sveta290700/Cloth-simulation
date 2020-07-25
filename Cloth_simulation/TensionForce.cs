@@ -20,7 +20,12 @@ namespace Cloth_simulation
                 normal /= normalLength;
                 float distance = spring.point0.distanceTo(spring.point1);
                 distance -= spring.length;
-                result += normal * distance * spring.tensionСoefficient * -1F;
+                Vector force = normal * distance * spring.tensionСoefficient * -1F;
+                if (!spring.point0.pinned && !spring.point1.pinned)
+                {
+                    force /= 2;
+                }
+                result += force;
             }
             return result;
         }

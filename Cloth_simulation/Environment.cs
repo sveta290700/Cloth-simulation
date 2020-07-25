@@ -45,7 +45,7 @@ namespace Cloth_simulation
             FrictionForce frictionForce = new FrictionForce();
            _forcesCollection.Add(frictionForce);
             TensionForce tensionForce = new TensionForce();
-           _forcesCollection.Add(tensionForce);
+            _forcesCollection.Add(tensionForce);
             GravityForce gravityForce = new GravityForce();
            _forcesCollection.Add(gravityForce);
         }
@@ -67,9 +67,9 @@ namespace Cloth_simulation
         }
         private void inputPoints()
         {
-            Point point0 = new Point(100, 300, 200, 100, 300, 100, true);
+            Point point0 = new Point(100, 300, 200, 100, 300, 200, true);
             _pointsCollection.Add(point0);
-            Point point1 = new Point(150, 200, 100, 100, 200, 100);
+            Point point1 = new Point(100, 200, 200, 100, 200, 200);
             _pointsCollection.Add(point1);
         }
         public void addPoint(Point point)
@@ -188,7 +188,7 @@ namespace Cloth_simulation
             {
                 Vector resultForce = getResultForce(_pointsCollection[i]);
                 _pointsCollection[i].updatePosition(resultForce * dt);
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     for (int k = 0; k < _pointsCollection.Count; k++)
                     {
@@ -217,49 +217,52 @@ namespace Cloth_simulation
         private void constrainXAxis(Point point, float velX, float limit)
         {
             point.pos.x = limit;
-            point.oldPos.x = point.pos.x + velX;
+            point.oldPos.x = point.pos.x + velX * 0.95F;
         }
         private void constrainYAxis(Point point, float velY, float limit)
         {
             point.pos.y = limit;
-            point.oldPos.y = point.pos.y + velY;
+            point.oldPos.y = point.pos.y + velY * 0.95F;
         }
         private void constrainZAxis(Point point, float velZ, float limit)
         {
             point.pos.z = limit;
-            point.oldPos.z = point.pos.z + velZ;
+            point.oldPos.z = point.pos.z + velZ * 0.95F;
         }
         private void constrainPoint(Point point)
         {
             if (!point.pinned)
             {
-                float limitDepth = depth - point.getRadius();
+                float maxDepth = depth - point.getRadius();
+                float minDepth = point.getRadius();
                 Vector velocity = point.getVelocity();
-                if (point.pos.x > limitDepth)
+                if (point.pos.x > maxDepth)
                 {
-                    constrainXAxis(point, velocity.x, limitDepth);
+                    constrainXAxis(point, velocity.x, maxDepth);
                 }
-                else if (point.pos.x < 0)
+                else if (point.pos.x < minDepth)
                 {
-                    constrainXAxis(point, velocity.x, 0);
+                    constrainXAxis(point, velocity.x, minDepth);
                 }
-                float limitWidth = width - point.getRadius();
-                if (point.pos.y > limitWidth)
+                float maxWidth = width - point.getRadius();
+                float minWidth = point.getRadius();
+                if (point.pos.y > maxWidth)
                 {
-                    constrainYAxis(point, velocity.y, limitWidth);
+                    constrainYAxis(point, velocity.y, maxWidth);
                 }
-                else if (point.pos.y < 0)
+                else if (point.pos.y < minWidth)
                 {
-                    constrainYAxis(point, velocity.y, 0);
+                    constrainYAxis(point, velocity.y, minWidth);
                 }
-                float limitHeight = height - point.getRadius();
-                if (point.pos.z > limitHeight)
+                float maxHeight = height - point.getRadius();
+                float minHeight = point.getRadius();
+                if (point.pos.z > maxHeight)
                 {
-                    constrainZAxis(point, velocity.z, limitHeight);
+                    constrainZAxis(point, velocity.z, maxHeight);
                 }
-                else if (point.pos.z < 0)
+                else if (point.pos.z < minHeight)
                 {
-                    constrainZAxis(point, velocity.z, 0);
+                    constrainZAxis(point, velocity.z, minHeight);
                 }
             }
         }

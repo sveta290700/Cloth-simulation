@@ -9,10 +9,9 @@ namespace Cloth_simulation
     {
         private ForceCoefficient forceCoefficient;
         ForceCoefficient IForce.forceCoefficient { get => forceCoefficient; set => forceCoefficient = value; }
-
         public FrictionForce()
         {
-            forceCoefficient = new ForceCoefficient(-0.01F, "Friction force");
+            forceCoefficient = new ForceCoefficient(-0.05F, "Friction force");
         }
 
         public Vector Apply(Point point)

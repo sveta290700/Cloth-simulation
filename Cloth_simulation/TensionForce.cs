@@ -15,9 +15,10 @@ namespace Cloth_simulation
             for (int i = 0; i < point.connectedSprings.Count; i++)
             {
                 Spring spring = point.connectedSprings[i];
+                Vector normal = point.pos - spring.getCenter();
                 float distance = spring.point0.distanceTo(spring.point1);
                 distance -= spring.length;
-                result += new Vector(distance, distance, distance) * spring.tensionСoefficient * -1;
+                result += normal * distance * spring.tensionСoefficient * -1F;
             }
             return result;
         }

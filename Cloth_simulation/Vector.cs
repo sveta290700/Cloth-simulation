@@ -44,6 +44,7 @@ namespace Cloth_simulation
             y = anotherVector.y;
             z = anotherVector.z;
         }
+
         public static Vector operator +(Vector a, Vector b) => new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
         public static Vector operator *(Vector a, float num) => new Vector(a.x * num, a.y * num, a.z * num);

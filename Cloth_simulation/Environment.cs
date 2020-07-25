@@ -67,7 +67,7 @@ namespace Cloth_simulation
         }
         private void inputPoints()
         {
-            Point point0 = new Point(100, 300, 200, 100, 300, 200, true);
+            Point point0 = new Point(100, 300, 200, 100, 300, 200);
             _pointsCollection.Add(point0);
             Point point1 = new Point(100, 200, 200, 100, 200, 200);
             _pointsCollection.Add(point1);

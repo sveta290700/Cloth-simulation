@@ -187,7 +187,7 @@ namespace Cloth_simulation
             for (int i = 0; i < _pointsCollection.Count; i++)
             {
                 Vector resultForce = getResultForce(_pointsCollection[i]);
-                _pointsCollection[i].updatePosition(resultForce * dt);
+                _pointsCollection[i].updatePosition(resultForce, dt);
                 for (int j = 0; j < 2; j++)
                 {
                     for (int k = 0; k < _pointsCollection.Count; k++)

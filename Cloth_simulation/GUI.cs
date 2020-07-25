@@ -41,6 +41,11 @@ namespace Cloth_simulation
         private void timer1_Tick(object sender, EventArgs e)
         {
             environment.tick();
+
+            /*if (environment.PointsArray()[1].mass > 0.1)
+            {
+                environment.PointsArray()[1].mass -= 0.01f;
+            }*/
             
             _graphics.FillRectangle(backBrush, 0, 0, panel1.Width, panel1.Height);
             

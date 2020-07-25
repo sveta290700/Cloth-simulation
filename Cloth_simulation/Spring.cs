@@ -17,7 +17,7 @@ namespace Cloth_simulation
         {
             get => _point1;
         }
-        private static float _tensionСoefficient = 0.2F;
+        private static float _tensionСoefficient = 0.05F;
         public float tensionСoefficient
         {
             get => _tensionСoefficient;
@@ -44,31 +44,6 @@ namespace Cloth_simulation
             middle.pos.y = (point0.pos.y + point1.pos.y) / 2;
             middle.pos.z = (point0.pos.z + point1.pos.z) / 2;
             return middle.pos;
-        }
-        private Vector getOffset()
-        {
-            float percent = getPercent();
-            Vector offset = new Vector(point1.pos.x - point0.pos.x, point1.pos.y - point0.pos.y, point1.pos.z - point0.pos.z) * percent;
-            return offset;
-        }
-        private float getPercent()
-        {
-            float distance = point0.distanceTo(point1);
-            float difference = length - distance;
-            float percent = difference / distance / 2;
-            return percent;
-        }
-        public void update()
-        {
-            //length = point0.distanceTo(point1);
-            if (!point0.isPinned())
-            {
-                point0.applyOffset(getOffset(), true);
-            }
-            if (!point1.isPinned())
-            {
-                point1.applyOffset(getOffset(), false);
-            }
         }
     }
 }

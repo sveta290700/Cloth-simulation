@@ -29,6 +29,7 @@ namespace Cloth_simulation
         public float mass
         {
             get => _mass;
+            set => _mass = value;
         }
         private bool _pinned = true;
         public bool pinned
@@ -82,13 +83,13 @@ namespace Cloth_simulation
             if (!isPinned())
             pinned = true;
         }
-        public void updatePosition(Vector changePos)
+        public void updatePosition(Vector acceleration, float dt)
         {
             if (!isPinned())
             {
                 Vector velocity = getVelocity();
                 oldPos = pos;
-                pos = pos + velocity + changePos;
+                pos = pos + velocity + acceleration * dt * dt / 2 / mass;
             }
         }
     }

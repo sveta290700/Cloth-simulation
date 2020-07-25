@@ -192,17 +192,9 @@ namespace Cloth_simulation
                 {
                     for (int k = 0; k < _pointsCollection.Count; k++)
                     {
-                        updateSprings(_pointsCollection[k].connectedSprings);
                         constrainPoint(_pointsCollection[k]);
                     }
                 }
-            }
-        }
-        private void updateSprings(List<Spring> spring)
-        {
-            for (int i = 0; i < spring.Count(); i++)
-            {
-                spring[i].update();
             }
         }
         private Vector getResultForce(Point point)

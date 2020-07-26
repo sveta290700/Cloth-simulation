@@ -13,14 +13,12 @@ namespace Cloth_simulation
 {
     public partial class GUI : Form
     {
-
         private Environment environment = new Environment();
         private Graphics _graphics;
         private SolidBrush backBrush = new SolidBrush(Color.White);
         private SolidBrush grayBrush = new SolidBrush(Color.Gray);
         private Pen grayPen = new Pen(Color.Gray);
-        Pen pen = new Pen(Color.Black);
-        
+        Pen pen = new Pen(Color.Black);        
         private Thread _gameThread;
         private ManualResetEvent _evExit;
 
@@ -28,13 +26,9 @@ namespace Cloth_simulation
         {
             InitializeComponent();
             DoubleBuffered = true;
-
             panel1.Visible = false;
-
             environment.width = panel1.Width;
             environment.height = panel1.Height;
-            
-            environment.CreateCloth(21, 10, 10);
         }
 
         private void GUI_Load(object sender, EventArgs e)
@@ -50,18 +44,19 @@ namespace Cloth_simulation
             for (int i = 0; i < environment.SpringsCollection.Count; i++)
             {
                 Spring spring = environment.SpringsCollection[i];
-                _graphics.DrawLine(grayPen, spring.point0.pos.y, spring.point0.pos.z, 
+                _graphics.DrawLine(pen, spring.point0.pos.y, spring.point0.pos.z, 
                     spring.point1.pos.y, spring.point1.pos.z);
             }
             
-            for (int i = 0; i < environment.PointsCollection.Count; i++)
+            //отрисовка точек и сил
+            /*for (int i = 0; i < environment.PointsCollection.Count; i++)
             {
                 Point point = environment.PointsCollection[i];
                 float radius = point.getRadius();
-                /*_graphics.DrawEllipse(pen, new RectangleF(point.pos.y - radius,
+                _graphics.DrawEllipse(pen, new RectangleF(point.pos.y - radius,
                     point.pos.z - radius, 2 * radius, 2 * radius));
                 _graphics.FillEllipse(grayBrush, new RectangleF(point.pos.y - radius,
-                    point.pos.z - radius, 2 * radius, 2 * radius));*/
+                    point.pos.z - radius, 2 * radius, 2 * radius));
                 for (int j = 0; j < environment.ForcesCollection.Count; j++)
                 {
                     var vect = environment.ForcesCollection[j].Apply(point);
@@ -69,10 +64,9 @@ namespace Cloth_simulation
                         point.pos.z, point.pos.y + vect.y,
                         point.pos.z + vect.z);
                 }
-            }
+            }*/
         }
 
-  
         private void GameThreadProc()
         {
             IAsyncResult tick = null;
@@ -82,7 +76,6 @@ namespace Cloth_simulation
                 {
                     if(!tick.AsyncWaitHandle.WaitOne(0))
                     {
-                        // we are running too slow, maybe we can do something about it
                         if(WaitHandle.WaitAny(
                             new WaitHandle[]
                             {
@@ -101,7 +94,6 @@ namespace Cloth_simulation
         private void OnGameTimerTick()
         {
             environment.tick();
-
             Invalidate();
         }
         
@@ -120,6 +112,83 @@ namespace Cloth_simulation
             _gameThread.Join();
             _evExit.Close();
             base.OnClosed(e);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string errors = "";
+            if (!Checks.IsEmpty(waterMarkTextBox1.Text))
+            {
+                if (!Checks.IsNumber(waterMarkTextBox1.Text))
+                {
+                    errors += "Неверный формат данных в поле <Ширина>\n";
+                }
+                if (Checks.IsNumber(waterMarkTextBox1.Text) && (!Checks.IsValidNumber(Convert.ToInt32(waterMarkTextBox1.Text), 2, 31)))
+                {
+                    errors += "Значение " + waterMarkTextBox1.Text + " не попадает в допустимый диапазон поля <Ширина> 2..31\n";
+                }
+            }
+            else
+            {
+                errors += "Пустое значение поля <Ширина>\n";
+            }
+            if (!Checks.IsEmpty(waterMarkTextBox2.Text))
+            {
+                if (!Checks.IsNumber(waterMarkTextBox2.Text))
+                {
+                    errors += "Неверный формат данных в поле <Высота>\n";
+                }
+                if (Checks.IsNumber(waterMarkTextBox2.Text) && (!Checks.IsValidNumber(Convert.ToInt32(waterMarkTextBox2.Text), 2, 10)))
+                {
+                    errors += "Значение " + waterMarkTextBox2.Text + " не попадает в допустимый диапазон поля <Высота> 2..10\n";
+                }
+            }
+            else
+            {
+                errors += "Пустое значение поля <Высота>\n";
+            }
+            if (!Checks.IsEmpty(waterMarkTextBox3.Text))
+            {
+                if (!Checks.IsNumber(waterMarkTextBox3.Text))
+                {
+                    errors += "Неверный формат данных в поле <Булавки>\n";
+                }
+                if (Checks.IsNumber(waterMarkTextBox3.Text) && (!Checks.IsValidNumber(Convert.ToInt32(waterMarkTextBox3.Text), 1, 10)))
+                {
+                    errors += "Значение " + waterMarkTextBox3.Text + " не попадает в допустимый диапазон поля <Булавки> 1..10\n";
+                }
+            }
+            else
+            {
+                errors += "Пустое значение поля <Булавки>\n";
+            }
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0:
+                    break;
+                case 1:
+                    pen.Color = Color.Red;
+                    break;
+                case 2:
+                    pen.Color = Color.Blue;
+                    break;
+                case 3:
+                    pen.Color = Color.Green;
+                    break;
+            }
+            if (errors == "")
+            {
+                environment.CreateCloth(Convert.ToInt32(waterMarkTextBox1.Text), Convert.ToInt32(waterMarkTextBox2.Text), Convert.ToInt32(waterMarkTextBox3.Text));
+                waterMarkTextBox1.Enabled = false;
+                waterMarkTextBox2.Enabled = false;
+                waterMarkTextBox3.Enabled = false;
+                comboBox1.Enabled = false;
+                button1.Enabled = false;
+            }
+            else
+            {
+                MessageBox.Show(errors, "Некорректные входные данные");
+            }
         }
     }
 }

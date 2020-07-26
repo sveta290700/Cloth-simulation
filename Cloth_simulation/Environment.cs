@@ -39,7 +39,6 @@ namespace Cloth_simulation
         public List<Point> PointsCollection => _pointsCollection;
         public List<IForce> ForcesCollection => _forcesCollection;
         public List<Spring> SpringsCollection => _springsCollection;
-
         public Environment() 
         {
             TensionForce tensionForce = new TensionForce();
@@ -53,8 +52,7 @@ namespace Cloth_simulation
         public static int getDepth()
         {
             return _depth;
-        }
-        
+        }      
         public void CreateCloth(int width, int height, int locked)
         {
             Point[,] points = new Point[width, height];
@@ -77,7 +75,6 @@ namespace Cloth_simulation
                     addPoint(point);
                 }
             }
-
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
@@ -104,25 +101,12 @@ namespace Cloth_simulation
                     }
                 }
             }
-        }
-        
+        }        
         public void changeSize(int depth, int width, int height)
         {
             this.depth = depth;
             this.width = width;
             this.height = height;
-        }
-        public void inputData()
-        {
-            inputPoints();
-            inputSprings();
-        }
-        private void inputPoints()
-        {
-            Point point0 = new Point(100, 300, 200, 100, 300, 200);
-            _pointsCollection.Add(point0);
-            Point point1 = new Point(100, 200, 200, 100, 200, 200);
-            _pointsCollection.Add(point1);
         }
         public void addPoint(Point point)
         {
@@ -135,12 +119,6 @@ namespace Cloth_simulation
         public int pointsSize()
         {
             return PointsCollection.Count();
-        }
-        private void inputSprings()
-        {
-            _springsCollection.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
-            _pointsCollection[0].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
-            _pointsCollection[1].connectedSprings.Add(new Spring(_pointsCollection[0], _pointsCollection[1]));
         }
         public void addSpring(Spring spring)
         {

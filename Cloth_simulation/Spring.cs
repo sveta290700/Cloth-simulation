@@ -17,7 +17,7 @@ namespace Cloth_simulation
         {
             get => _point1;
         }
-        private static float _tensionСoefficient = 4F;
+        private static float _tensionСoefficient = 8F;
         public float tensionСoefficient
         {
             get => _tensionСoefficient;

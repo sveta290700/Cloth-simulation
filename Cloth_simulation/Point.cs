@@ -25,7 +25,7 @@ namespace Cloth_simulation
             get => _radius;
             set => _radius = value;
         }
-        private float _mass = 2F;
+        private float _mass = 7F;
         public float mass
         {
             get => _mass;

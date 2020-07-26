@@ -125,7 +125,7 @@
             this.waterMarkTextBox2.Size = new System.Drawing.Size(91, 23);
             this.waterMarkTextBox2.TabIndex = 13;
             this.waterMarkTextBox2.WaterMarkColor = System.Drawing.Color.Gray;
-            this.waterMarkTextBox2.WaterMarkText = "Число [2..10]";
+            this.waterMarkTextBox2.WaterMarkText = "Число [2..5]";
             // 
             // waterMarkTextBox3
             // 

@@ -138,9 +138,9 @@ namespace Cloth_simulation
                 {
                     errors += "Неверный формат данных в поле <Высота>\n";
                 }
-                if (Checks.IsNumber(waterMarkTextBox2.Text) && (!Checks.IsValidNumber(Convert.ToInt32(waterMarkTextBox2.Text), 2, 10)))
+                if (Checks.IsNumber(waterMarkTextBox2.Text) && (!Checks.IsValidNumber(Convert.ToInt32(waterMarkTextBox2.Text), 2, 5)))
                 {
-                    errors += "Значение " + waterMarkTextBox2.Text + " не попадает в допустимый диапазон поля <Высота> 2..10\n";
+                    errors += "Значение " + waterMarkTextBox2.Text + " не попадает в допустимый диапазон поля <Высота> 2..5\n";
                 }
             }
             else
